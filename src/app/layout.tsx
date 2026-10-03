@@ -36,6 +36,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${manrope.variable} ${syne.variable} h-full antialiased`}
       suppressHydrationWarning
+      
     >
       <body className="min-h-full flex flex-col">
         {children}

@@ -98,7 +98,7 @@ export default function Footer() {
 
         {/* Mobile: links on top, copyright underneath. Desktop: one row */}
         <div className="mt-16 grid grid-cols-2 items-center gap-4 border-t border-border py-6 text-xs text-subtle md:flex md:justify-between">
-          <p className="order-last col-span-2 md:order-none">
+          <p className="order-last col-span-2 md:order-0">
             © {new Date().getFullYear()} SyntiqHQ. All rights reserved.
           </p>
           <p className="flex gap-2">

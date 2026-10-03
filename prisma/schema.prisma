@@ -1,0 +1,655 @@
+// SyntiqHQ internal CRM schema. See docs/PROJECT_BRIEF.md (Sections 36–51).
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  ADMIN
+  MEMBER
+}
+
+enum Industry {
+  HEALTHCARE
+  SAAS
+  REAL_ESTATE
+  PROFESSIONAL_SERVICES
+  FINANCE
+  EDUCATION
+  HOSPITALITY
+  ECOMMERCE
+  CONSTRUCTION
+  LOGISTICS
+  TECHNOLOGY
+  TRAVEL
+  MARKETING
+  LEGAL
+  OTHER
+}
+
+enum CompanySize {
+  SOLO
+  SMALL
+  MEDIUM
+  LARGE
+  ENTERPRISE
+  UNKNOWN
+}
+
+enum WebsiteStatus {
+  NO_WEBSITE
+  POOR
+  OUTDATED
+  AVERAGE
+  GOOD
+  EXCELLENT
+}
+
+enum OpportunityLevel {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum LeadPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum LeadStatus {
+  RESEARCHING
+  QUALIFIED
+  AUDIT_READY
+  CONTACTED
+  FOLLOW_UP_1
+  FOLLOW_UP_2
+  REPLIED
+  MEETING_BOOKED
+  PROPOSAL_SENT
+  NEGOTIATING
+  WON
+  LOST
+  NOT_INTERESTED
+  DO_NOT_CONTACT
+}
+
+enum ContactRole {
+  FOUNDER
+  CEO
+  OWNER
+  DIRECTOR
+  MANAGING_DIRECTOR
+  MARKETING_DIRECTOR
+  HEAD_OF_DIGITAL
+  CTO
+  COO
+  OTHER
+}
+
+enum ContactStatus {
+  ACTIVE
+  INACTIVE
+  UNKNOWN
+  UNSUBSCRIBED
+}
+
+enum ReviewStatus {
+  DRAFT
+  READY
+  PUBLISHED
+  ARCHIVED
+}
+
+enum OutreachChannel {
+  EMAIL
+  LINKEDIN
+  PHONE
+  OTHER
+}
+
+enum OutreachType {
+  INITIAL
+  FOLLOW_UP
+  REMINDER
+  BREAKUP
+  MANUAL
+  OTHER
+}
+
+enum OutreachStatus {
+  DRAFT
+  SCHEDULED
+  SENT
+  DELIVERED
+  REPLIED
+  BOUNCED
+  FAILED
+  CANCELLED
+}
+
+enum TaskStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum TaskType {
+  RESEARCH
+  AUDIT
+  RECORD_VIDEO
+  OUTREACH
+  FOLLOW_UP
+  MEETING
+  PROPOSAL
+  GENERAL
+}
+
+enum ProposalStatus {
+  DRAFT
+  SENT
+  VIEWED
+  ACCEPTED
+  REJECTED
+  EXPIRED
+  CANCELLED
+}
+
+enum DealStatus {
+  OPEN
+  WON
+  LOST
+}
+
+enum ActivityType {
+  COMPANY_CREATED
+  COMPANY_UPDATED
+  COMPANY_ARCHIVED
+  CONTACT_CREATED
+  CONTACT_UPDATED
+  CONTACT_DELETED
+  CONTACT_UNSUBSCRIBED
+  LEAD_CREATED
+  LEAD_UPDATED
+  LEAD_DELETED
+  STATUS_CHANGED
+  REVIEW_CREATED
+  REVIEW_PUBLISHED
+  OUTREACH_SENT
+  OUTREACH_REPLIED
+  OUTREACH_BOUNCED
+  MEETING_BOOKED
+  PROPOSAL_CREATED
+  PROPOSAL_SENT
+  PROPOSAL_VIEWED
+  PROPOSAL_ACCEPTED
+  PROPOSAL_REJECTED
+  PROPOSAL_DELETED
+  DEAL_CREATED
+  DEAL_WON
+  DEAL_LOST
+  DEAL_DELETED
+  TASK_CREATED
+  TASK_COMPLETED
+  TASK_DELETED
+  NOTE_ADDED
+  OTHER
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  name         String?
+  passwordHash String
+  role         UserRole @default(ADMIN)
+  isActive     Boolean  @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sessions         Session[]
+  tasks            Task[]
+  activities       ActivityLog[]
+  createdReviews   Review[]      @relation("ReviewCreatedBy")
+  createdProposals Proposal[]    @relation("ProposalCreatedBy")
+  assignedLeads    Lead[]        @relation("LeadAssignedTo")
+}
+
+model Session {
+  id String @id @default(uuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // SHA-256 of the session token; the raw token only ever lives in the cookie.
+  tokenHash String @unique
+
+  expiresAt  DateTime
+  lastUsedAt DateTime @default(now())
+
+  userAgent String?
+  ipAddress String?
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model Company {
+  id String @id @default(uuid())
+
+  name String
+  slug String @unique
+
+  website String?
+  domain  String?
+
+  industry Industry?
+  country  String?
+  city     String?
+
+  companySize CompanySize @default(UNKNOWN)
+
+  websiteStatus      WebsiteStatus    @default(NO_WEBSITE)
+  websiteOpportunity OpportunityLevel @default(MEDIUM)
+
+  description String?
+  linkedinUrl String?
+  phone       String?
+
+  source    String?
+  sourceUrl String?
+
+  notes String?
+
+  archivedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  contacts   Contact[]
+  leads      Lead[]
+  reviews    Review[]
+  activities ActivityLog[]
+  tasks      Task[]
+  proposals  Proposal[]
+  deals      Deal[]
+
+  @@index([name])
+  @@index([domain])
+  @@index([industry])
+  @@index([country])
+  @@index([city])
+  @@index([companySize])
+  @@index([websiteStatus])
+  @@index([websiteOpportunity])
+  @@index([archivedAt])
+}
+
+model Contact {
+  id String @id @default(uuid())
+
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  firstName String?
+  lastName  String?
+  fullName  String
+
+  // Stored lowercase so it matches Suppression.email.
+  email String?
+  phone String?
+
+  jobTitle String?
+  role     ContactRole @default(OTHER)
+
+  linkedinUrl String?
+  status      ContactStatus @default(ACTIVE)
+
+  isPrimary Boolean @default(false)
+
+  unsubscribeToken String @unique @default(uuid())
+
+  notes String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  leads      Lead[]
+  outreach   Outreach[]
+  activities ActivityLog[]
+
+  @@index([companyId])
+  @@index([email])
+  @@index([fullName])
+  @@index([status])
+}
+
+model Lead {
+  id String @id @default(uuid())
+
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  contactId String?
+  contact   Contact? @relation(fields: [contactId], references: [id], onDelete: SetNull)
+
+  assignedToId String?
+  assignedTo   User?   @relation("LeadAssignedTo", fields: [assignedToId], references: [id], onDelete: SetNull)
+
+  status   LeadStatus   @default(RESEARCHING)
+  priority LeadPriority @default(MEDIUM)
+
+  leadScore Int?
+
+  buyingSignal    String?
+  buyingSignalUrl String?
+
+  estimatedValue Decimal? @db.Decimal(12, 2)
+  currency       String   @default("USD")
+
+  nextAction   String?
+  nextActionAt DateTime?
+
+  firstContactedAt DateTime?
+  lastContactedAt  DateTime?
+
+  notes String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  reviews    Review[]
+  outreach   Outreach[]
+  tasks      Task[]
+  proposals  Proposal[]
+  deal       Deal?
+  activities ActivityLog[]
+
+  @@index([companyId])
+  @@index([contactId])
+  @@index([assignedToId])
+  @@index([status])
+  @@index([priority])
+  @@index([leadScore])
+  @@index([nextActionAt])
+  @@index([createdAt])
+}
+
+model Review {
+  id String @id @default(uuid())
+
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  leadId String?
+  lead   Lead?   @relation(fields: [leadId], references: [id], onDelete: SetNull)
+
+  createdById String?
+  createdBy   User?   @relation("ReviewCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+
+  title String?
+
+  // Unpredictable public token used in /review/[slug]; generated server-side.
+  slug String @unique
+
+  status ReviewStatus @default(DRAFT)
+
+  introduction  String?
+  videoUrl      String?
+  videoProvider String?
+
+  conclusion String?
+  ctaText    String?
+  ctaUrl     String?
+
+  isPublic Boolean @default(false)
+  noIndex  Boolean @default(true)
+
+  publishedAt DateTime?
+  expiresAt   DateTime?
+
+  viewCount    Int       @default(0)
+  lastViewedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  points ReviewPoint[]
+
+  @@index([companyId])
+  @@index([leadId])
+  @@index([status])
+  @@index([publishedAt])
+}
+
+model ReviewPoint {
+  id String @id @default(uuid())
+
+  reviewId String
+  review   Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+
+  title       String
+  description String
+
+  category       String?
+  recommendation String?
+
+  order Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([reviewId, order])
+}
+
+model Outreach {
+  id String @id @default(uuid())
+
+  leadId String
+  lead   Lead   @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  contactId String?
+  contact   Contact? @relation(fields: [contactId], references: [id], onDelete: SetNull)
+
+  channel OutreachChannel @default(EMAIL)
+  type    OutreachType    @default(INITIAL)
+
+  // Position in the follow-up sequence (Day 0 = 0, Day 3 = 1, ...). Null for ad-hoc messages.
+  sequenceStep Int?
+
+  status OutreachStatus @default(DRAFT)
+
+  subject String?
+  body    String?
+
+  reviewUrl      String?
+  unsubscribeUrl String?
+
+  provider   String?
+  providerId String?
+
+  scheduledAt DateTime?
+  sentAt      DateTime?
+  deliveredAt DateTime?
+  repliedAt   DateTime?
+  bouncedAt   DateTime?
+
+  errorMessage String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([leadId, createdAt])
+  @@index([contactId])
+  @@index([status])
+  @@index([channel])
+  @@index([scheduledAt])
+  @@index([sentAt])
+  @@index([providerId])
+}
+
+model Task {
+  id String @id @default(uuid())
+
+  title       String
+  description String?
+
+  type     TaskType     @default(GENERAL)
+  status   TaskStatus   @default(PENDING)
+  priority TaskPriority @default(MEDIUM)
+
+  dueAt       DateTime?
+  completedAt DateTime?
+
+  assignedToId String?
+  assignedTo   User?   @relation(fields: [assignedToId], references: [id], onDelete: SetNull)
+
+  companyId String?
+  company   Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  leadId String?
+  lead   Lead?   @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status, dueAt])
+  @@index([priority])
+  @@index([assignedToId])
+  @@index([companyId])
+  @@index([leadId])
+}
+
+model Proposal {
+  id String @id @default(uuid())
+
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  leadId String?
+  lead   Lead?   @relation(fields: [leadId], references: [id], onDelete: SetNull)
+
+  createdById String?
+  createdBy   User?   @relation("ProposalCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+
+  title          String
+  proposalNumber String @unique
+
+  status ProposalStatus @default(DRAFT)
+
+  description String?
+
+  amount   Decimal @db.Decimal(12, 2)
+  currency String  @default("USD")
+
+  validUntil DateTime?
+
+  documentUrl String?
+
+  sentAt     DateTime?
+  viewedAt   DateTime?
+  acceptedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([companyId])
+  @@index([leadId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model Deal {
+  id String @id @default(uuid())
+
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  leadId String @unique
+  lead   Lead   @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  title String
+
+  status DealStatus @default(OPEN)
+
+  value    Decimal @db.Decimal(12, 2)
+  currency String  @default("USD")
+
+  expectedCloseAt DateTime?
+  closedAt        DateTime?
+
+  notes String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([companyId])
+  @@index([status])
+  @@index([expectedCloseAt])
+}
+
+model Suppression {
+  id String @id @default(uuid())
+
+  // Always stored lowercase.
+  email String @unique
+
+  reason String?
+  source String?
+
+  companyName String?
+
+  unsubscribedAt DateTime @default(now())
+
+  notes String?
+
+  createdAt DateTime @default(now())
+
+  @@index([unsubscribedAt])
+}
+
+model ActivityLog {
+  id String @id @default(uuid())
+
+  type ActivityType
+
+  description String?
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  companyId String?
+  company   Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  contactId String?
+  contact   Contact? @relation(fields: [contactId], references: [id], onDelete: SetNull)
+
+  leadId String?
+  lead   Lead?   @relation(fields: [leadId], references: [id], onDelete: SetNull)
+
+  metadata Json?
+
+  createdAt DateTime @default(now())
+
+  @@index([type])
+  @@index([userId])
+  @@index([companyId, createdAt])
+  @@index([contactId])
+  @@index([leadId, createdAt])
+  @@index([createdAt])
+}

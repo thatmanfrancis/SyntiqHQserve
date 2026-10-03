@@ -209,6 +209,24 @@ enum ActivityType {
   OTHER
 }
 
+enum EnquiryService {
+  NEW_WEBSITE
+  BOOKING
+  REDESIGN
+  APP
+  CARE
+  OTHER
+}
+
+// In USD
+enum EnquiryBudget {
+  UNDER_5K
+  FROM_5K_TO_10K
+  FROM_10K_TO_25K
+  OVER_25K
+  NOT_SURE
+}
+
 model User {
   id           String   @id @default(uuid())
   email        String   @unique
@@ -651,5 +669,25 @@ model ActivityLog {
   @@index([companyId, createdAt])
   @@index([contactId])
   @@index([leadId, createdAt])
+  @@index([createdAt])
+}
+
+// A message sent through the website's contact form.
+model Enquiry {
+  id String @id @default(uuid())
+
+  name    String
+  email   String
+  company String?
+
+  service EnquiryService
+  budget  EnquiryBudget?
+  message String
+
+  // Set once Resend accepts the notification email. Null means the email failed, so check it by hand.
+  notifiedAt DateTime?
+
+  createdAt DateTime @default(now())
+
   @@index([createdAt])
 }

@@ -11,7 +11,7 @@ const footerColumns = [
       { label: "What We Do", href: "/services" },
       { label: "Selected Work", href: "/work" },
       { label: "Pricing", href: "/pricing" },
-      { label: "Questions & Answers", href: "/faq" },
+      { label: "Questions & Answers", href: "/#faq" },
       { label: "About the Studio", href: "/about" },
     ],
   },

@@ -77,6 +77,8 @@ Use these exact strings in filters, selects and bodies.
 | TaskPriority | `LOW` `MEDIUM` `HIGH` `URGENT` |
 | ProposalStatus | `DRAFT` `SENT` `VIEWED` `ACCEPTED` `REJECTED` `EXPIRED` `CANCELLED` |
 | DealStatus | `OPEN` `WON` `LOST` |
+| EnquiryService | `NEW_WEBSITE` `BOOKING` `REDESIGN` `APP` `CARE` `OTHER` |
+| EnquiryBudget (USD) | `UNDER_5K` `FROM_5K_TO_10K` `FROM_10K_TO_25K` `OVER_25K` `NOT_SURE` |
 
 ---
 
@@ -477,6 +479,30 @@ For deals created by mistake. The lead's status is left alone. Returns `{ messag
 
 ---
 
+## Contact form
+
+### `POST /api/contact` (public)
+For the website's contact form. No login needed.
+
+| Field | Rules |
+| --- | --- |
+| `name` | required, up to 100 characters |
+| `email` | required, valid email |
+| `company` | optional, up to 150 characters |
+| `service` | required, EnquiryService |
+| `budget` | optional, EnquiryBudget |
+| `message` | required, 10 to 5000 characters |
+| `website` | hidden spam trap; leave it empty and visually hide the input |
+
+- Saves an `Enquiry`, then emails it to `CONTACT_INBOX_EMAIL` through Resend, with reply-to set to the sender.
+- Sends the person a short confirmation from `CONTACT_FROM_EMAIL` with reply-to set to the inbox. It never repeats their message, and it's skipped if their email is on the suppression list.
+- If an email fails, the enquiry is still saved and the response is the same. `notifiedAt` stays empty when the inbox notification failed.
+- Limited to 5 messages per hour per IP (`429`).
+
+Returns `{ message: "Thanks for getting in touch. We'll reply within 24 hours." }` (201). `400` with a readable `message` if a field is invalid.
+
+---
+
 ## Frontend coverage checklist
 
 Each screen and the endpoints it should use. When building a screen, tick off every endpoint listed for it.
@@ -502,3 +528,4 @@ Each screen and the endpoints it should use. When building a screen, tick off ev
 | Deals | `GET`/`POST /api/admin/deals`, `GET`/`PATCH`/`DELETE /api/admin/deals/:id` |
 | Suppression | `GET`/`POST /api/admin/suppression`, `DELETE /api/admin/suppression/:id` |
 | Public unsubscribe page `/unsubscribe/:token` | `POST /api/unsubscribe/:token` |
+| Public contact page `/contact` | `POST /api/contact` |

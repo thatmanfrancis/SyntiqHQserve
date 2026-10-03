@@ -21,7 +21,7 @@ export default function Hero() {
       <Container className="relative">
         <h1
           aria-label="Websites that bring you customers, not just visitors."
-          className="mx-auto text-center text-[clamp(2.5rem,6vw,5rem)] font-normal leading-none tracking-tight"
+          className="mx-auto font-semibold text-center text-[clamp(2.5rem,6vw,5rem)] leading-none tracking-tight"
         >
           <span aria-hidden>
             Websites that bring{" "}
@@ -42,7 +42,7 @@ export default function Hero() {
           customers.
         </p>
 
-        <div className="relative -mx-4 mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 [scrollbar-width:none] sm:mt-12 md:mx-0 md:grid md:grid-cols-3 md:gap-5 md:overflow-visible md:px-0 md:pb-0">
+        <div className="relative -mx-4 mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 scrollbar-none sm:mt-12 md:mx-0 md:grid md:grid-cols-3 md:gap-5 md:overflow-visible md:px-0 md:pb-0">
           <article style={{ background: blue }} className={`${cardStyle} flex flex-col text-white`}>
             <p className="text-4xl font-semibold tracking-tight sm:text-5xl">~4 wks</p>
             <p className="mt-2 text-lg font-medium leading-snug">From first call to launch</p>

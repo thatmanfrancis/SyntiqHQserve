@@ -14,14 +14,24 @@ const manrope = Manrope({
   subsets: ["latin"],
 });
 
+const title = "SyntiqHQ — Website Design, Development & Online Booking for Growing Businesses";
+const description =
+  "SyntiqHQ is a web design and development studio building fast, search-friendly websites, web apps and online booking systems for businesses in every industry, from healthcare to fintech. Websites live in around 4 weeks.";
+
 export const metadata: Metadata = {
   title: {
     template: "%s | SyntiqHQ",
-    default: "SyntiqHQ Technologies",
+    default: title,
   },
-  description:
-    "SyntiqHQ is a software development company that provides software development services to businesses and individuals.",
+  description,
   metadataBase: new URL(process.env.PUBLIC_SITE_URL || "https://syntiqhq.com"),
+  openGraph: {
+    type: "website",
+    siteName: "SyntiqHQ",
+    url: "/",
+    title,
+    description,
+  },
   icons: {
     icon: [
       { url: "/syntiqhqfavicon-black.png", media: "(prefers-color-scheme: light)" },

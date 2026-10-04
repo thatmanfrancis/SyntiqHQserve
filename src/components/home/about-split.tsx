@@ -1,6 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
 import Container from "../container";
-import PhotoPlaceholder from "./photo-placeholder";
 
 export default function AboutSplit() {
   return (
@@ -12,9 +12,13 @@ export default function AboutSplit() {
       />
 
       <Container className="relative grid items-center gap-14 lg:grid-cols-2 lg:gap-16">
-        <PhotoPlaceholder
-          label="The SyntiqHQ team at work"
-          className="reveal mx-auto aspect-4/3 w-full max-w-xl rounded-3xl"
+        <Image
+          src="/images/about-team.jpg"
+          alt="A team chatting together in a bright office in Lagos"
+          width={1600}
+          height={1067}
+          sizes="(min-width: 1024px) 36rem, 100vw"
+          className="reveal mx-auto aspect-4/3 w-full max-w-xl rounded-3xl object-cover"
         />
 
         <div className="reveal max-w-lg">

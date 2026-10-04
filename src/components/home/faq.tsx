@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import SectionLink from "@/components/section-link";
 import { useState } from "react";
 import Container from "../container";
 import Eyebrow from "./eyebrow";
@@ -29,7 +29,7 @@ const questions = [
   {
     question: "How long will the project take?",
     answer:
-      "A complete website is typically live in about 4 weeks, and a booking upgrade in about 2. Larger apps and integrations take longer. You get a written schedule with clear milestones before work starts.",
+      "It depends on the size of the project. A smaller website can be live in a few weeks, while larger websites, apps and integrations can take up to three months. You get a written schedule with clear milestones before work starts.",
   },
   {
     question: "Will my website be optimised for Google?",
@@ -91,8 +91,8 @@ export default function Faq() {
               Ask Francis directly. You&apos;ll get a real answer within 24 hours.
             </p>
             <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-4">
-              <Link
-                href="/contact"
+              <SectionLink
+                id="contact"
                 className="inline-flex items-center gap-3 rounded-full bg-[#2563eb] py-3 pl-6 pr-4 text-base font-medium text-white transition hover:bg-[#1d4ed8]"
               >
                 Ask a question
@@ -101,7 +101,7 @@ export default function Faq() {
                     <path d="M3 8h10M9 4l4 4-4 4" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </span>
-              </Link>
+              </SectionLink>
               <a
                 href="mailto:contact@syntiqhq.com"
                 className="text-base text-white/80 underline-offset-4 transition hover:text-white hover:underline"

@@ -1,5 +1,6 @@
 import AboutSplit from "@/components/home/about-split";
 import ClosingBanner from "@/components/home/closing-banner";
+import ContactSection from "@/components/home/contact-section";
 import Faq from "@/components/home/faq";
 import IndustriesStrip from "@/components/home/industries-strip";
 import ProcessCarousel from "@/components/home/process-carousel";
@@ -20,6 +21,7 @@ export default function Home() {
       <Faq />
       <Testimonials />
       <ClosingBanner />
+      <ContactSection />
     </>
   );
 }

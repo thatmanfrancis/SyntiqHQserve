@@ -528,4 +528,4 @@ Each screen and the endpoints it should use. When building a screen, tick off ev
 | Deals | `GET`/`POST /api/admin/deals`, `GET`/`PATCH`/`DELETE /api/admin/deals/:id` |
 | Suppression | `GET`/`POST /api/admin/suppression`, `DELETE /api/admin/suppression/:id` |
 | Public unsubscribe page `/unsubscribe/:token` | `POST /api/unsubscribe/:token` |
-| Public contact page `/contact` | `POST /api/contact` |
+| Homepage contact section `/#contact` (`/contact` redirects there) | `POST /api/contact` |

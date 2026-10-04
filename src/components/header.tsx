@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import SectionLink from "@/components/section-link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -79,12 +80,12 @@ export default function Header() {
         <span className="md:hidden" />
 
         <div className="flex items-center pr-5 sm:pr-8 lg:pr-10">
-          <Link
-            href="/contact"
+          <SectionLink
+            id="contact"
             className={`${linkStyle} hidden underline decoration-foreground/40 underline-offset-[6px] hover:decoration-foreground md:inline`}
           >
             Start a project
-          </Link>
+          </SectionLink>
 
           {/* Three lines that fold into an X */}
           <button
@@ -153,8 +154,8 @@ export default function Header() {
           style={{ transitionDelay: menuOpen ? `${200 + navLinks.length * 70}ms` : "0ms" }}
           className={`mt-auto pt-10 transition duration-500 ${menuOpen ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"}`}
         >
-          <Link
-            href="/contact"
+          <SectionLink
+            id="contact"
             onClick={() => setMenuOpen(false)}
             className="flex items-center justify-center gap-3 rounded-full bg-[#2563eb] py-3 pl-6 pr-3 text-base font-medium text-white transition hover:bg-[#1d4ed8]"
           >
@@ -164,7 +165,7 @@ export default function Header() {
                 <path d="M3 13 13 3M5 3h8v8" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </span>
-          </Link>
+          </SectionLink>
           <a
             href="mailto:contact@syntiqhq.com"
             className="mt-6 block text-center text-base text-muted transition hover:text-foreground"

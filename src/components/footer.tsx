@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Container from "./container";
+import SectionLink from "./section-link";
 
 // Each entry is one column. Add a link to a column, or add a whole new column, here.
 const footerColumns = [
@@ -40,7 +41,7 @@ const footerColumns = [
     title: "Get in Touch",
     links: [
       { label: "contact@syntiqhq.com ↗", href: "mailto:contact@syntiqhq.com" },
-      { label: "Start a Project ↗", href: "/contact" },
+      { label: "Start a Project ↗", href: "/#contact" },
     ],
   },
 ];
@@ -81,16 +82,24 @@ export default function Footer() {
                 {column.title}
               </h3>
               <ul className="mt-6 space-y-3">
-                {column.links.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="inline-block text-sm text-muted transition duration-300 ease-out hover:translate-x-2 hover:text-foreground"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
+                {column.links.map((link) => {
+                  const className =
+                    "inline-block text-sm text-muted transition duration-300 ease-out hover:translate-x-2 hover:text-foreground";
+
+                  return (
+                    <li key={link.href}>
+                      {link.href.startsWith("/#") ? (
+                        <SectionLink id={link.href.slice(2)} className={className}>
+                          {link.label}
+                        </SectionLink>
+                      ) : (
+                        <Link href={link.href} className={className}>
+                          {link.label}
+                        </Link>
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           ))}

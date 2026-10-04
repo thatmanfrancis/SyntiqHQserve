@@ -1,9 +1,10 @@
-import Link from "next/link";
+import Image from "next/image";
+import SectionLink from "@/components/section-link";
 import Container from "../container";
 import Notch from "./notch";
-import PhotoPlaceholder from "./photo-placeholder";
+import VideoModal from "./video-modal";
 
-// Add the link once the studio video is ready. Until then the button shows but does nothing.
+// Add a direct video file link (e.g. .mp4) once the studio video is ready. Until then the modal says it's coming soon.
 const videoUrl: string | null = null;
 
 export default function ClosingBanner() {
@@ -18,10 +19,13 @@ export default function ClosingBanner() {
       <Container className="relative">
         <div className="reveal relative">
           <div className="relative aspect-4/5 overflow-hidden rounded-3xl sm:aspect-video lg:aspect-19/10">
-            <PhotoPlaceholder
-              dark
-              label="SyntiqHQ studio at work"
-              className="size-full"
+            <Image
+              src="/images/closing-banner.jpg"
+              alt="A team on a video call with a remote colleague"
+              width={2000}
+              height={1333}
+              sizes="(min-width: 1280px) 80rem, 100vw"
+              className="size-full object-cover"
             />
             <div className="absolute inset-0 bg-linear-to-b from-black/60 via-transparent to-transparent sm:bg-linear-to-l sm:via-black/10" />
 
@@ -57,42 +61,12 @@ export default function ClosingBanner() {
 }
 
 function Actions() {
-  const playIcon = (
-    <span className="flex size-9 items-center justify-center rounded-full bg-[#dbeafe] text-[#2563eb]">
-      <svg viewBox="0 0 16 16" fill="currentColor" className="ml-0.5 size-3">
-        <path d="M4 2.5v11l9-5.5z" />
-      </svg>
-    </span>
-  );
-  const playStyle =
-    "inline-flex items-center gap-3 rounded-full border border-border bg-white py-1.5 pl-1.5 pr-6 text-base font-medium text-[#1c1c21] transition";
-
   return (
     <>
-      {videoUrl ? (
-        <a
-          href={videoUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`${playStyle} hover:border-[#2563eb]/40`}
-        >
-          {playIcon}
-          Play video
-        </a>
-      ) : (
-        <button
-          type="button"
-          disabled
-          title="Video coming soon"
-          className={playStyle}
-        >
-          {playIcon}
-          Play video
-        </button>
-      )}
+      <VideoModal videoUrl={videoUrl} />
 
-      <Link
-        href="/contact"
+      <SectionLink
+        id="contact"
         className="inline-flex items-center gap-3 rounded-full bg-[#2563eb] py-3 pl-6 pr-4 text-base font-medium text-white transition hover:bg-[#1d4ed8]"
       >
         Start a project
@@ -111,7 +85,7 @@ function Actions() {
             />
           </svg>
         </span>
-      </Link>
+      </SectionLink>
     </>
   );
 }

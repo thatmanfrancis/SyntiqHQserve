@@ -1,4 +1,4 @@
-import Link from "next/link";
+import SectionLink from "@/components/section-link";
 import Container from "./container";
 
 const blue = "#2563eb";
@@ -49,8 +49,8 @@ export default function Hero() {
             <p className="mt-4 text-base leading-relaxed text-white/75">
               Clear milestones, async updates and a written timeline from day one.
             </p>
-            <Link
-              href="/contact"
+            <SectionLink
+              id="contact"
               style={{ color: dark }}
               className="mt-6 inline-flex w-fit items-center gap-3 rounded-full bg-white py-1.5 pl-5 pr-1.5 text-base font-medium transition hover:opacity-90"
             >
@@ -61,7 +61,7 @@ export default function Hero() {
               >
                 <ArrowIcon className="size-3.5" />
               </span>
-            </Link>
+            </SectionLink>
           </article>
 
           <article style={{ background: dark }} className={`${cardStyle} flex flex-col text-white`}>
@@ -95,14 +95,14 @@ export default function Hero() {
             </p>
           </article>
 
-          <Link
-            href="/contact"
+          <SectionLink
+            id="contact"
             aria-label="Start a project"
             style={{ background: lime, color: dark }}
             className="absolute bottom-0 left-1/3 hidden size-20 -translate-x-1/2 translate-y-1/4 items-center justify-center rounded-full ring-10 ring-background transition hover:scale-105 md:flex"
           >
             <ArrowIcon className="size-7" />
-          </Link>
+          </SectionLink>
         </div>
       </Container>
     </section>

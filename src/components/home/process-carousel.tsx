@@ -1,11 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Container from "../container";
 import Eyebrow from "./eyebrow";
 import Notch from "./notch";
-import PhotoPlaceholder from "./photo-placeholder";
 
 const sectionColor = "#eef3fc";
 
@@ -15,18 +15,24 @@ const steps = [
     title: "The Strategic Scope",
     description:
       "A focused conversation about your business, your customers and your goals, then a written brief and an agreed scope before any work starts.",
+    image: "/images/process/strategic-scope.jpg",
+    imageAlt: "Two professionals planning a project together on their laptops",
   },
   {
     label: "Step 02 · Weeks 2–3",
     title: "Thoughtful Creation",
     description:
       "We handle the design, structure and writing. You review clear previews and short updates on your own schedule.",
+    image: "/images/process/thoughtful-creation.jpg",
+    imageAlt: "A designer working on visuals at her desktop computer",
   },
   {
     label: "Step 03 · Launch",
     title: "Seamless Launch",
     description:
       "We test every button, connect your calendar and email, and launch with zero downtime. Then you get a full handover.",
+    image: "/images/process/seamless-launch.jpg",
+    imageAlt: "A team in Lagos celebrating with a high five",
   },
 ];
 
@@ -82,7 +88,7 @@ export default function ProcessCarousel() {
         <div className="max-w-md">
           <p className="text-base leading-relaxed text-muted sm:text-lg">
             No endless discovery calls. No surprise scope changes. Just clear milestones, async
-            updates and a finished website in about four weeks.
+            updates and a launch date agreed before work starts.
           </p>
           <Link
             href="/approach"
@@ -120,7 +126,14 @@ export default function ProcessCarousel() {
                 className={`relative w-(--slide) shrink-0 transition-[height] ${easing} ${isActive ? "h-full" : "h-[80%]"}`}
               >
                 <div className="absolute inset-0 overflow-hidden rounded-3xl">
-                  <PhotoPlaceholder label={step.title} className="size-full" />
+                  <Image
+                    src={step.image}
+                    alt={step.imageAlt}
+                    width={1600}
+                    height={1067}
+                    sizes="(min-width: 640px) 52rem, 82vw"
+                    className="size-full object-cover"
+                  />
                   <div
                     className={`absolute inset-0 transition-opacity duration-500 ${isActive ? "opacity-100" : "opacity-0"}`}
                   >

@@ -27,7 +27,7 @@ export default function NotFound() {
               </svg>
             </span>
           </BackButton>
-          <Link href="/contact" className={secondaryButton}>
+          <Link href="/#contact" className={secondaryButton}>
             Start a project
           </Link>
         </StatusPage>

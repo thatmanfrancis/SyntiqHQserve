@@ -1,11 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import Container from "../container";
 import Eyebrow from "./eyebrow";
 import Notch from "./notch";
-import PhotoPlaceholder from "./photo-placeholder";
 
 const services = [
   {
@@ -13,30 +13,40 @@ const services = [
     description:
       "Make a strong first impression and give customers a clear reason to choose you. Clean design, fast loading, easy to read on any phone.",
     tag: "Responsive",
+    image: "/images/services/business-websites.jpg",
+    imageAlt: "A small business owner smiling at her laptop beside packed orders",
   },
   {
     title: "Online Booking",
     description:
       "Booking calendars, consultation forms and customer portals. Practical tools that save your team hours of calls and emails every week.",
     tag: "Instant booking",
+    image: "/images/services/online-booking.jpg",
+    imageAlt: "A clinic receptionist with a tablet welcoming a patient",
   },
   {
     title: "Website Redesigns",
     description:
       "Outgrown your current site? We rebuild it into a clean, modern presence that builds trust from the very first visit.",
     tag: "Modern refresh",
+    image: "/images/services/website-redesigns.jpg",
+    imageAlt: "Website wireframes sketched in a notebook next to a phone",
   },
   {
     title: "Web & Mobile Apps",
     description:
       "Custom web and mobile apps, scoped around what you actually need and built by the same senior team you talk to.",
     tag: "Custom built",
+    image: "/images/services/web-mobile-apps.jpg",
+    imageAlt: "Hands holding a phone with a screen full of apps",
   },
   {
     title: "Monthly Care",
     description:
       "Keep your site fast, safe and up to date, with direct access to the team that built it whenever you need a change.",
     tag: "Always looked after",
+    image: "/images/services/monthly-care.jpg",
+    imageAlt: "A developer in Nairobi working on code across two screens",
   },
 ];
 
@@ -133,7 +143,14 @@ export default function ServicesAccordion() {
 function ServiceImage({ service, className }: { service: (typeof services)[number]; className: string }) {
   return (
     <div className={`relative ${className}`}>
-      <PhotoPlaceholder label={`${service.title} example`} className="aspect-4/3 w-full rounded-3xl" />
+      <Image
+        src={service.image}
+        alt={service.imageAlt}
+        width={1200}
+        height={800}
+        sizes="(min-width: 640px) 12rem, 100vw"
+        className="aspect-4/3 w-full rounded-3xl object-cover"
+      />
       <Notch color="var(--surface)" className="pl-2 pt-2">
         <span className="block whitespace-nowrap rounded-full border border-border px-3 py-1 text-sm text-[#1c1c21]">
           {service.tag}

@@ -10,6 +10,10 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // The contact form lives on the homepage, so old /contact links land on it
+  async redirects() {
+    return [{ source: "/contact", destination: "/#contact", permanent: false }];
+  },
   async headers() {
     return [
       {

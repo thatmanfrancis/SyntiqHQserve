@@ -10,31 +10,32 @@ type Testimonial = {
   logo?: string;
 };
 
-// Placeholders only. Replace with real client quotes before launch, never invented ones.
+// Draft wording with placeholder names. Swap each one for a real client's words and name
+// (with their permission) before launch; never publish invented attributions.
 const testimonials: Testimonial[] = [
   {
     quote:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    name: "John Doe",
-    company: "Company Inc.",
+      "We finally have a website that looks like the business we actually run. The process was clear from day one, and we always knew what was happening next.",
+    name: "Client name",
+    company: "Clinic name",
   },
   {
     quote:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    name: "Jane Doe",
-    company: "Company Inc.",
+      "Patients can now book appointments online at any hour. Our front desk spends far less time on the phone and far more time with the people in front of them.",
+    name: "Client name",
+    company: "Practice name",
   },
   {
     quote:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    name: "John Doe",
-    company: "Company Inc.",
+      "The price we agreed at the start was the price we paid. No surprise invoices, and the team replied quickly every time we had a question.",
+    name: "Client name",
+    company: "Company name",
   },
   {
     quote:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    name: "John Doe",
-    company: "Company Inc.",
+      "They took the time to understand our customers before designing anything. The new site is fast on every phone and the enquiries have been steadier since launch.",
+    name: "Client name",
+    company: "Company name",
   },
 ];
 
@@ -58,7 +59,7 @@ export default function Testimonials() {
               key={i}
               className="reveal w-[85%] shrink-0 snap-center rounded-3xl border border-white/20 p-7 sm:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)]"
             >
-              <blockquote className="text-[15px] leading-relaxed text-foreground/85">
+              <blockquote className="text-base leading-relaxed text-foreground/85">
                 &ldquo;{testimonial.quote}&rdquo;
               </blockquote>
 
